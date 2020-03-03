@@ -1,78 +1,93 @@
-#    Friendly Telegram (telegram userbot)
-#    Copyright (C) 2018-2019 The Authors
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# you may not use this file except in compliance with the License.
 
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from .. import loader, utils
-import logging
 import asyncio
+from asyncio import wait, sleep
+
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot.events import register
 
 
-logger = logging.getLogger(__name__)
+@register(outgoing=True, pattern="^.cspam (.*)")
+async def tmeme(e):
+    cspam = str(e.pattern_match.group(1))
+    message = cspam.replace(" ", "")
+    await e.delete()
+    for letter in message:
+        await e.respond(letter)
+    if BOTLOG:
+        await e.client.send_message(
+            BOTLOG_CHATID, "#CSPAM\n"
+            "TSpam was executed successfully")
 
 
-def register(cb):
-    cb(SpamMod())
+@register(outgoing=True, pattern="^.wspam (.*)")
+async def tmeme(e):
+    wspam = str(e.pattern_match.group(1))
+    message = wspam.split()
+    await e.delete()
+    for word in message:
+        await e.respond(word)
+    if BOTLOG:
+        await e.client.send_message(
+            BOTLOG_CHATID, "#WSPAM\n"
+            "WSpam was executed successfully")
 
 
-@loader.tds
-class SpamMod(loader.Module):
-    """Annoys people really effectively"""
-    strings = {"name": "Spam",
-               "need_spam": "<b>U wot? I need something to spam.</b>",
-               "spam_urself": "<b>Go spam urself.</b>",
-               "nice_number": "<b>Nice number bro.</b>",
-               "much_spam": "<b>Haha, much spam.</b>"}
+@register(outgoing=True, pattern="^.spam (.*)")
+async def spammer(e):
+    counter = int(e.pattern_match.group(1).split(' ', 1)[0])
+    spam_message = str(e.pattern_match.group(1).split(' ', 1)[1])
+    await e.delete()
+    await asyncio.wait([e.respond(spam_message) for i in range(counter)])
+    if BOTLOG:
+        await e.client.send_message(BOTLOG_CHATID, "#SPAM\n"
+                                    "Spam was executed successfully")
 
-    def __init__(self):
-        self.name = self.strings["name"]
 
-    async def spamcmd(self, message):
-        """.spam <count> <message>"""
-        use_reply = False
-        args = utils.get_args(message)
-        logger.debug(args)
-        if len(args) == 0:
-            await utils.answer(message, self.strings["need_spam"])
-            return
-        if len(args) == 1:
-            if message.is_reply:
-                use_reply = True
-            else:
-                await utils.answer(message, self.strings["spam_urself"])
-                return
-        count = args[0]
-        spam = (await message.get_reply_message()) if use_reply else message
-        spam.message = " ".join(args[1:])
-        try:
-            count = int(count)
-        except ValueError:
-            await utils.answer(message, self.strings["nice_number"])
-            return
-        if count < 1:
-            await utils.answer(message, self.strings["much_spam"])
-            return
-        await message.delete()
-        if count > 20:
-            # Be kind to other people
-            sleepy = 2
-        else:
-            sleepy = 0
-        i = 0
-        size = 1 if sleepy else 100
-        while i < count:
-            await asyncio.gather(*[message.respond(spam) for x in range(min(count, size))])
-            await asyncio.sleep(sleepy)
-            i += size
-        await self.allmodules.log("spam", group=message.to_id, data=spam.message + " (" + str(count) + ")")
+@register(outgoing=True, pattern="^.picspam")
+async def tiny_pic_spam(e):
+    message = e.text
+    text = message.split()
+    counter = int(text[1])
+    link = str(text[2])
+    await e.delete()
+    for i in range(1, counter):
+        await e.client.send_file(e.chat_id, link)
+    if BOTLOG:
+        await e.client.send_message(
+            BOTLOG_CHATID, "#PICSPAM\n"
+            "PicSpam was executed successfully")
+
+
+@register(outgoing=True, pattern="^.delayspam (.*)")
+async def spammer(e):
+    spamDelay = float(e.pattern_match.group(1).split(' ', 2)[0])
+    counter = int(e.pattern_match.group(1).split(' ', 2)[1])
+    spam_message = str(e.pattern_match.group(1).split(' ', 2)[2])
+    await e.delete()
+    for i in range(1, counter):
+        await e.respond(spam_message)
+        await sleep(spamDelay)
+    if BOTLOG:
+        await e.client.send_message(
+            BOTLOG_CHATID, "#DelaySPAM\n"
+            "DelaySpam was executed successfully")
+
+
+CMD_HELP.update({
+    "spam":
+    ".cspam <text>\
+\nUsage: Spam the text letter by letter.\
+\n\n.spam <count> <text>\
+\nUsage: Floods text in the chat !!\
+\n\n.wspam <text>\
+\nUsage: Spam the text word by word.\
+\n\n.picspam <count> <link to image/gif>\
+\nUsage: As if text spam was not enough !!\
+\n\n.delayspam <delay> <count> <text>\
+\nUsage: .bigspam but with custom delay.\
+\n\n\nNOTE : Spam at your own risk !!"
+})
