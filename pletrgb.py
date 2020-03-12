@@ -14,9 +14,13 @@ from telethon import events
 from PIL import Image, ImageDraw, ImageFont
 
 from uniborg.util import admin_cmd
-  
-def __init__(self):
-    self.name = _("Text-Sticker")
+def register(cb):
+    cb(stickerlo())
+
+
+class stickerlo(loader.Module):
+    def __init__(self):
+        self.name = _("Text-Sticker")
 @borg.on(admin_cmd(pattern="plet (.*)"))
 async def sticklet(event):
     
