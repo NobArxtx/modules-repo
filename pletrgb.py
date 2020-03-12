@@ -3,7 +3,9 @@
 #Exclusive for My personal Repo
 #Requirement of this plugin is very high (Kumbhkaran ki aulad)
 #Dare To edit this part! U will be tored apart! >>Really Nibba<< 
-
+from .. import loader, utils
+import logging
+import asyncio
 import io
 import textwrap
 import random
@@ -13,6 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from uniborg.util import admin_cmd
 
+self.name = _("Text-Sticker")
 @borg.on(admin_cmd(pattern="plet (.*)"))
 async def sticklet(event):
     
