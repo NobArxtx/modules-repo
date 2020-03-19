@@ -51,7 +51,7 @@ async def sticklet(event):
     image_stream.seek(0)
 
     # finally, reply the sticker
-    await event.reply("https://t.me/UniBorg/95", file=image_stream)
+    await event.reply("Sticker", file=image_stream)
 
     # cleanup
     try:
