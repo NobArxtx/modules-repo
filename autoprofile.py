@@ -21,6 +21,8 @@ import logging
 from io import BytesIO
 from telethon.tl import functions
 from .. import loader, utils
+from datetime import datetime 
+from pytz import timezone 
 
 logger = logging.getLogger(__name__)
 
@@ -189,7 +191,9 @@ class AutoProfileMod(loader.Module):
         await utils.answer(message, self.strings["enabled_name"])
 
         while self.name_enabled is True:
-            current_time = time.strftime("%H:%M")
+            format = "%Y-%m-%d %H:%M:%S %Z%z" 
+            now_asia = now_utc.astimezone(timezone('Asia/Kolkata')) 
+            current_time = now_asia.strftime("%H:%M")
             name = raw_name.format(time=current_time)
             await self.client(functions.account.UpdateProfileRequest(
                 first_name=name
