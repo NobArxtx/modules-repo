@@ -191,7 +191,7 @@ class AutoProfileMod(loader.Module):
         await utils.answer(message, self.strings["enabled_name"])
 
         while self.name_enabled is True:
-            format = "%Y-%m-%d %H:%M:%S %Z%z" 
+            now_utc = datetime.now(timezone('UTC')) 
             now_asia = now_utc.astimezone(timezone('Asia/Kolkata')) 
             current_time = now_asia.strftime("%H:%M")
             name = raw_name.format(time=current_time)
