@@ -14,7 +14,16 @@ async def _(event):
     deaths_info = country_data["deaths"]
     recovered_info = country_data["recovered"]
     country_name = country_data["country"]
-    await event.edit("**Country**","**"+country_name+"**","\n**Confirmed**:",confirmed_info,"\n**Active**:",Active_info,"\n**Deaths**:",deaths_info,"\n**Recovered**:",recovered_info)
+    country_lol = "**Country** %s\n\n"%country_name
+    confirmed_lol = "**Confirmed**:%s\n"%confirmed_info
+    Active_lol = "**Active**:%s\n"%Active_info
+    Deaths_lol = "**Deaths**:%s\n"%deaths_info
+    recovered_lol = "**Recovered**:%s"%recovered_info
+    country_lol += confirmed_lol
+    country_lol += Active_lol
+    country_lol += Deaths_lol
+    country_lol += recovered_lol
+    await event.edit(country_lol)
 def get_country_data(country, world):
     for country_data in world:
         if country_data["country"] == country:
