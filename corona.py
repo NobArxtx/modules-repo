@@ -9,13 +9,14 @@ async def _(event):
     data = covid.get_data()
     country = event.pattern_match.group(1)
     country_data = get_country_data(country, data)
-    output_text = "" 
-    for name, value in country_data.items():
-        output_text += "**{}**: {}\n".format(str(name), str(value))
-    await event.edit("**{}**:\n\n{}".format(country.capitalize(), output_text))
-
+    confirmed_info = country_data["confirmed"]
+Active_info = country_data["active"]
+deaths_info = country_data["deaths"]
+recovered_info = country_data["recovered"]
+country_name = country_data["country"]
+await event.edit("**Country**","**"+country_name+"**","\n**Confirmed**:",confirmed_info,"\n**Active**:",Active_info,"\n**Deaths**:",deaths_info,"\n**Recovered**:",recovered_info)
 def get_country_data(country, world):
     for country_data in world:
         if country_data["country"] == country:
             return country_data
-    return {"Status": "`No information yet about this country!`"}
+    return {"**Status**": "No information yet about this country!"}
