@@ -14,11 +14,11 @@ async def _(event):
     deaths_info = country_data["deaths"]
     recovered_info = country_data["recovered"]
     country_name = country_data["country"]
-    country_lol = "**Country** %s\n\n"%country_name
-    confirmed_lol = "**Confirmed**:%s\n"%confirmed_info
-    Active_lol = "**Active**:%s\n"%Active_info
-    Deaths_lol = "**Deaths**:%s\n"%deaths_info
-    recovered_lol = "**Recovered**:%s"%recovered_info
+    country_lol = "**Country** **%s**\n\n"%country_name
+    confirmed_lol = "**Confirmed**:`%s`\n"%confirmed_info
+    Active_lol = "**Active**:`%s`\n"%Active_info
+    Deaths_lol = "**Deaths**:`%s`\n"%deaths_info
+    recovered_lol = "**Recovered**:`%s`"%recovered_info
     country_lol += confirmed_lol
     country_lol += Active_lol
     country_lol += Deaths_lol
