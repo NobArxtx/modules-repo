@@ -66,7 +66,7 @@ class DoNotDisturb(loader.Module):
                "pm_go_away": ("Hey there! Unfortunately, I don't accept private messages from strangers."
                               "\n\nPlease contact me in a group, or <b>wait</b> for me to approve you."),
                "pm_reported": "<b>You just got reported to spam !</b>",
-               "pm_limit_arg": "<b>Argument must be 'off', 'on' or a number between 10 and 1000 !</b>",
+               "pm_limit_arg": "<b>Argument must be 'off', 'on' or a number between 2 and 100 !</b>",
                "pm_limit_off": "<b>Not allowed users are now free to PM without be automatically blocked.</b>",
                "pm_limit_on": "<b>Not allowed users are now blocked after {} PMs.</b>",
                "pm_limit_current": "<b>Current limit is {}.</b>",
@@ -403,7 +403,7 @@ class DoNotDisturb(loader.Module):
                     pms = self._db.get(__name__, "pms", {})
                     pm_limit = self._db.get(__name__, "pm_limit_max")
                     pm_user = pms.get(message.from_id, 0)
-                    if isinstance(pm_limit, int) and pm_limit >= 10 and pm_limit <= 1000 and pm_user >= pm_limit:
+                    if isinstance(pm_limit, int) and pm_limit >= 2 and pm_limit <= 100 and pm_user >= pm_limit:
                         await utils.answer(message, self.strings["pm_triggered"])
                         await message.client(functions.contacts.BlockRequest(message.from_id))
                         await message.client(functions.messages.ReportSpamRequest(peer=message.from_id))
