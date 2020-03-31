@@ -448,7 +448,7 @@ class DoNotDisturb(loader.Module):
 
     def get_current_pm_limit(self):
         pm_limit = self._db.get(__name__, "pm_limit_max")
-        if not isinstance(pm_limit, int) or pm_limit < 5 or pm_limit > 100:
+        if not isinstance(pm_limit, int) or pm_limit < 2 or pm_limit > 100:
             pm_limit = self.default_pm_limit
             self._db.set(__name__, "pm_limit_max", pm_limit)
         return pm_limit
