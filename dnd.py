@@ -318,7 +318,7 @@ class DoNotDisturb(loader.Module):
             else:
                 try:
                     pmlimit_number = int(pmlimit_arg)
-                    if pmlimit_number >= 10 and pmlimit_number <= 1000:
+                    if pmlimit_number >= 2 and pmlimit_number <= 100:
                         self._db.set(__name__, "pm_limit_max", pmlimit_number)
                         pmlimit_new = self.strings["pm_limit_set"].format(self.get_current_pm_limit())
                         await utils.answer(message, pmlimit_new)
@@ -403,7 +403,7 @@ class DoNotDisturb(loader.Module):
                     pms = self._db.get(__name__, "pms", {})
                     pm_limit = self._db.get(__name__, "pm_limit_max")
                     pm_user = pms.get(message.from_id, 0)
-                    if isinstance(pm_limit, int) and pm_limit >= 10 and pm_limit <= 1000 and pm_user >= pm_limit:
+                    if isinstance(pm_limit, int) and pm_limit >= 2 and pm_limit <= 100 and pm_user >= pm_limit:
                         await utils.answer(message, self.strings["pm_triggered"])
                         await message.client(functions.contacts.BlockRequest(message.from_id))
                         await message.client(functions.messages.ReportSpamRequest(peer=message.from_id))
@@ -448,7 +448,7 @@ class DoNotDisturb(loader.Module):
 
     def get_current_pm_limit(self):
         pm_limit = self._db.get(__name__, "pm_limit_max")
-        if not isinstance(pm_limit, int) or pm_limit < 10 or pm_limit > 1000:
+        if not isinstance(pm_limit, int) or pm_limit < 2 or pm_limit > 100:
             pm_limit = self.default_pm_limit
             self._db.set(__name__, "pm_limit_max", pm_limit)
         return pm_limit
